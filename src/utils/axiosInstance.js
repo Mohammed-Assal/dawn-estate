@@ -3,9 +3,9 @@ import { checkTokenExpiry } from "../utils/checkTokenExpiry";
 import { logout } from "../redux/slices/adminSlice";
 import store from "../redux/store";
 // http://localhost:5000
-// backend-dawn.vercel.app
+// https://backend-dawn.vercel.app
 const axiosInstance = axios.create({
-  baseURL: "backend-dawn.vercel.app",
+  baseURL: "https://backend-dawn.vercel.app",
 });
 
 axiosInstance.interceptors.request.use(
