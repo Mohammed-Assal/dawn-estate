@@ -16,30 +16,43 @@ import {
 
 import { Header } from "@/components/home/Header";
 import { Footer } from "@/components/home/Footer";
+import { translations } from "@/i18n/translations"; 
+import Link from "next/link";
 
 export default function App() {
   const mode = useSelector((state) => state.theme.mode);
-  const isDark = mode === "dark";
+  const language = useSelector((state) => state.lang?.language) || "en";
 
-  // Logo-inspired gold identity
+  const isDark = mode === "dark";
+  const isRTL = language === "ar";
+
+  const t = (key) =>
+    translations[language]?.[key] || translations.en?.[key] || key;
+
   const gold = isDark ? "#B6A17E" : "#927750";
 
   const theme = {
-    page: isDark ? "bg-[#080808] text-white" : "bg-[#F5F2EC] text-[#29251F]",
+    page: isDark
+      ? "bg-[#080808] text-white"
+      : "bg-[#F5F2EC] text-[#29251F]",
     heading: isDark ? "text-white" : "text-[#29251F]",
     muted: isDark ? "text-white/50" : "text-[#746E64]",
     card: isDark
       ? "bg-[#101010] border-white/10"
       : "bg-[#FCFAF6] border-[#E5DED2]",
-    sectionBorder: isDark ? "border-white/10" : "border-[#DED6C9]",
-    secondaryBg: isDark ? "bg-[#101010]" : "bg-[#EDE8DF]",
+    sectionBorder: isDark
+      ? "border-white/10"
+      : "border-[#DED6C9]",
+    secondaryBg: isDark
+      ? "bg-[#101010]"
+      : "bg-[#EDE8DF]",
   };
 
   const staticProperties = [
     {
       id: "1",
-      category: "Villa",
-      prestation: "Sale",
+      category: "villa",
+      prestation: "sale",
       city: "Marrakech",
       address: "Hivernage",
       surface: 650,
@@ -50,8 +63,8 @@ export default function App() {
     },
     {
       id: "2",
-      category: "Apartment",
-      prestation: "Sale",
+      category: "apartment",
+      prestation: "sale",
       city: "Marrakech",
       address: "Gueliz",
       surface: 140,
@@ -62,8 +75,8 @@ export default function App() {
     },
     {
       id: "3",
-      category: "House",
-      prestation: "Rent",
+      category: "house",
+      prestation: "rent",
       city: "Marrakech",
       address: "Medina",
       surface: 200,
@@ -74,8 +87,8 @@ export default function App() {
     },
     {
       id: "4",
-      category: "Villa",
-      prestation: "Sale",
+      category: "villa",
+      prestation: "sale",
       city: "Marrakech",
       address: "Palmeraie",
       surface: 1200,
@@ -86,8 +99,17 @@ export default function App() {
     },
   ];
 
+  const philosophyItems = [
+    { title: "exclusivity", desc: "exclusivityDesc" },
+    { title: "trust", desc: "trustDesc" },
+    { title: "excellence", desc: "excellenceDesc" },
+    { title: "passion", desc: "passionDesc" },
+  ];
+
   return (
     <div
+      dir={isRTL ? "rtl" : "ltr"}
+      lang={language}
       className={`min-h-screen transition-colors duration-300 selection:text-white ${theme.page}`}
       style={{ "--brand-gold": gold }}
     >
@@ -95,7 +117,6 @@ export default function App() {
 
       {/* HERO SECTION */}
       <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
-
         <div className="absolute inset-0">
           <motion.img
             initial={{ scale: 1.1 }}
@@ -135,18 +156,14 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.5,
-                duration: 1,
-                ease: "easeOut",
-              }}
+              transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
               className="space-y-6"
             >
               <span
                 className="text-[10px] tracking-[0.5em] uppercase font-medium"
                 style={{ color: gold }}
               >
-                ESTABLISHED 2024 / MARRAKECH
+                {t("establishedTagline")}
               </span>
 
               <h1
@@ -154,7 +171,7 @@ export default function App() {
                   isDark ? "text-white" : "text-[#29251F]"
                 }`}
               >
-                Elevated Living.
+                {t("elevatedLiving")}
               </h1>
             </motion.div>
 
@@ -164,8 +181,7 @@ export default function App() {
               transition={{ delay: 0.8, duration: 1 }}
               className={`max-w-xl mx-auto text-sm md:text-base leading-relaxed tracking-wider font-light ${theme.muted}`}
             >
-              Discover an exclusive collection of Marrakech most refined
-              estates, where traditional elegance meets contemporary luxury.
+              {t("homeHeroDescription")}
             </motion.p>
 
             <motion.div
@@ -174,7 +190,8 @@ export default function App() {
               transition={{ delay: 1.1, duration: 1 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8"
             >
-              <button
+              <Link
+              href={"/properties"}
                 className={`group relative px-12 py-5 overflow-hidden border transition-all duration-500 hover:text-white ${
                   isDark
                     ? "border-[#B6A17E]/70 text-white hover:bg-[#B6A17E]"
@@ -182,9 +199,9 @@ export default function App() {
                 }`}
               >
                 <span className="relative z-10 text-[10px] tracking-[0.4em] uppercase font-medium">
-                  VIEW PROPERTIES
+                  {t("viewProperties")}
                 </span>
-              </button>
+              </Link>
 
               <button
                 className={`group flex items-center gap-4 transition-colors duration-300 ${
@@ -194,16 +211,22 @@ export default function App() {
                 }`}
               >
                 <span className="text-[10px] tracking-[0.4em] uppercase font-medium">
-                  ESTIMATE YOUR PROPERTY
+                  {t("estimateProperty")}
                 </span>
 
-                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" />
+                <ArrowRight
+                  className={`w-4 h-4 transition-transform duration-300 ${
+                    isRTL
+                      ? "rotate-180 group-hover:-translate-x-2"
+                      : "group-hover:translate-x-2"
+                  }`}
+                />
               </button>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* SCROLL INDICATOR */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -215,7 +238,7 @@ export default function App() {
               isDark ? "text-white/30" : "text-[#746E64]/60"
             }`}
           >
-            SCROLL
+            {t("scroll")}
           </span>
 
           <div
@@ -232,10 +255,9 @@ export default function App() {
         className={`py-32 border-b transition-colors duration-300 ${theme.page} ${theme.sectionBorder}`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-8">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="space-y-4"
@@ -244,16 +266,16 @@ export default function App() {
                 className="text-[10px] tracking-[0.4em] uppercase font-medium"
                 style={{ color: gold }}
               >
-                CURATED COLLECTION
+                {t("curatedCollection")}
               </span>
 
               <h2 className={`text-4xl md:text-5xl font-serif ${theme.heading}`}>
-                Recent Properties
+                {t("recentProperties")}
               </h2>
             </motion.div>
 
             <motion.button
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: isRTL ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className={`text-[10px] tracking-[0.4em] uppercase border-b pb-2 transition-colors duration-300 ${
@@ -262,7 +284,10 @@ export default function App() {
                   : "text-[#746E64] border-[#DED6C9] hover:text-[#927750]"
               }`}
             >
-              VIEW ALL PROPERTIES
+              <Link href={"/properties"}>
+              {t("viewAllProperties")}
+              </Link>
+             
             </motion.button>
           </div>
 
@@ -287,10 +312,7 @@ export default function App() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{
-                      delay: index * 0.1,
-                      duration: 0.8,
-                    }}
+                    transition={{ delay: index * 0.1, duration: 0.8 }}
                     className="h-full"
                   >
                     <div
@@ -299,16 +321,20 @@ export default function App() {
                       <div className="relative h-[450px] overflow-hidden shrink-0">
                         <img
                           src={property.image}
-                          alt={property.category}
+                          alt={t(property.category)}
                           className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 ease-out"
                         />
 
-                        <div className="absolute top-6 left-6 flex flex-col gap-3">
+                        <div
+                          className={`absolute top-6 ${
+                            isRTL ? "right-6" : "left-6"
+                          } flex flex-col gap-3`}
+                        >
                           <span
                             className="text-white text-[10px] tracking-[0.2em] uppercase px-4 py-1.5"
                             style={{ backgroundColor: gold }}
                           >
-                            {property.prestation}
+                            {t(property.prestation)}
                           </span>
 
                           <span
@@ -318,7 +344,7 @@ export default function App() {
                                 : "bg-[#F5F2EC]/95 text-[#29251F] border-[#DED6C9]"
                             }`}
                           >
-                            {property.category}
+                            {t(property.category)}
                           </span>
                         </div>
 
@@ -333,7 +359,7 @@ export default function App() {
                               e.currentTarget.style.backgroundColor = "#F5F2EC";
                             }}
                           >
-                            VIEW DETAILS
+                            {t("viewDetails")}
                           </button>
                         </div>
                       </div>
@@ -344,7 +370,7 @@ export default function App() {
                             className="flex items-center"
                             style={{ color: gold }}
                           >
-                            <MapPin className="w-3 h-3 mr-2" />
+                            <MapPin className={`w-3 h-3 ${isRTL ? "ml-2" : "mr-2"}`} />
 
                             <span className="text-[10px] uppercase tracking-[0.3em] font-medium">
                               {property.address}
@@ -354,7 +380,7 @@ export default function App() {
                           <h3
                             className={`text-2xl font-serif transition-colors duration-300 group-hover:text-[var(--brand-gold)] ${theme.heading}`}
                           >
-                            {property.category}{" "}
+                            {t(property.category)}{" "}
                             <span className={`font-sans font-light ${theme.muted}`}>
                               /
                             </span>{" "}
@@ -369,7 +395,7 @@ export default function App() {
                             <span className="block">{property.price}</span>
 
                             <span className={`block text-[9px] sm:text-[10px] tracking-[0.25em] ${theme.muted}`}>
-                              MAD
+                              {t("mad")}
                             </span>
                           </p>
 
@@ -421,7 +447,6 @@ export default function App() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -452,58 +477,36 @@ export default function App() {
                   className="text-[10px] tracking-[0.4em] uppercase font-medium"
                   style={{ color: gold }}
                 >
-                  OUR PHILOSOPHY
+                  {t("ourPhilosophy")}
                 </span>
 
                 <h2
                   className={`text-5xl md:text-6xl font-serif leading-tight ${theme.heading}`}
                 >
-                  Beyond Real Estate.
+                  {t("beyondRealEstate")}
                 </h2>
 
                 <p className={`text-lg font-light leading-relaxed ${theme.muted}`}>
-                  At Dawn Estate, we dont just find properties. We curate
-                  experiences. Our mission is to match the world most
-                  discerning clients with homes that reflect their values
-                  and aspirations.
+                  {t("philosophyDescription")}
                 </p>
               </motion.div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {[
-                  {
-                    title: "Exclusivity",
-                    desc: "Access to off-market gems.",
-                  },
-                  {
-                    title: "Trust",
-                    desc: "Discretion is our hallmark.",
-                  },
-                  {
-                    title: "Excellence",
-                    desc: "No detail is too small.",
-                  },
-                  {
-                    title: "Passion",
-                    desc: "Driven by architecture.",
-                  },
-                ].map((item, i) => (
+                {philosophyItems.map((item, i) => (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    key={i}
+                    key={item.title}
                     className="space-y-2"
                   >
-                    <h4
-                      className={`font-serif text-xl ${theme.heading}`}
-                    >
-                      {item.title}
+                    <h4 className={`font-serif text-xl ${theme.heading}`}>
+                      {t(item.title)}
                     </h4>
 
                     <p className={`text-sm font-light uppercase tracking-widest ${theme.muted}`}>
-                      {item.desc}
+                      {t(item.desc)}
                     </p>
 
                     <div
@@ -524,7 +527,7 @@ export default function App() {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1628592102751-ba8240275021?q=80&w=2070&auto=format&fit=crop"
+            src="/uploads/5d32c630-2d56-4b5f-8506-deca0d063217.jpeg"
             alt="Luxury Estate"
             className="w-full h-full object-cover grayscale brightness-[0.45]"
           />
@@ -543,11 +546,11 @@ export default function App() {
               className="text-[10px] tracking-[0.5em] uppercase font-medium"
               style={{ color: "#D2B98D" }}
             >
-              GET A PROFESSIONAL ESTIMATE FOR YOUR PROPERTY
+              {t("estimateSubtitle")}
             </span>
 
             <h2 className="text-5xl md:text-7xl font-serif">
-              Estimate Your Property
+              {t("estimateProperty")}
             </h2>
           </motion.div>
 
@@ -557,12 +560,13 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <button
+            <Link
+            href={"/contact"}
               className="px-16 py-6 text-[10px] tracking-[0.5em] uppercase font-bold text-white transition-all duration-500 hover:tracking-[0.65em]"
               style={{ backgroundColor: gold }}
             >
-              CONTACT US
-            </button>
+              {t("contactUs")}
+            </Link>
           </motion.div>
         </div>
       </section>

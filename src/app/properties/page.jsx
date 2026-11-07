@@ -33,7 +33,6 @@ export default function PropertiesPage() {
     return translations[language]?.[key] || translations.en[key] || key;
   };
 
-  const [showFilters, setShowFilters] = useState(false);
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

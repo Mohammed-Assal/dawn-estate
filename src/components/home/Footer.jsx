@@ -3,6 +3,7 @@ import React from 'react';
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { translations } from '@/i18n/translations';
+import Link from 'next/link';
 
 export function Footer({ onNavigate }) {
   const mode = useSelector((state) => state.theme.mode);
@@ -40,18 +41,18 @@ export function Footer({ onNavigate }) {
             <h4 className={`text-[10px] uppercase tracking-[0.3em] font-bold ${isDark ? 'text-white' : 'text-foreground'}`}>{t('quickLinks')}</h4>
             <ul className="space-y-4">
               {[
-                { key: 'home', label: t('home') },
+                { key: '', label: t('home') },
                 { key: 'properties', label: t('properties') },
-                { key: 'add-property', label: t('addProperty') },
+                { key: 'blog', label: t('blog') },
                 { key: 'help', label: t('help') }
               ].map((link) => (
                 <li key={link.key}>
-                  <button
-                    onClick={() => onNavigate(link.key)}
+                  <Link
+                    href={`/${link.key}`}
                     className="text-[10px] uppercase tracking-widest hover:text-warm-brown transition-colors duration-500 font-medium"
                   >
                     {link.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

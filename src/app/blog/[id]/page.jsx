@@ -6,7 +6,7 @@ import { Header } from "@/components/home/Header";
 async function fetchBlogData(slug) {
   try {
     const res = await fetch(
-      `https://backend-dawn.vercel.app//api/blog/${slug}`,
+      `https://backend-dawn.vercel.app/api/blog/${slug}`,
       {
         next: { revalidate: 60 },
       }

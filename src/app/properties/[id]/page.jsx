@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 async function fetchProduct(id) {
     try {
       const res = await fetch(
-        `https://backend-dawn.vercel.app//api/properties/${id}`,
+        `https://backend-dawn.vercel.app/api/properties/${id}`,
         {
           next: { revalidate: 60 }, 
         }
